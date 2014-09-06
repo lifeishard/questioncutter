@@ -89,22 +89,21 @@ public class JavaApplication1 {
                    //  System.out.println(g);
                       if(lastword==0)
                       {
-                          if(i>2*fontchecksize)cutlist.add(i-2*fontchecksize);
-                                  else cutlist.add(0);
+                          if(i>fontchecksize)cutlist.add(i-2*fontchecksize);
+                          else cutlist.add(0);
                           lastword=i;
                       }
                       else if(g.matches("\\d+\\..*"))
                      {
-                         cutlist.add(((lastword+i)/2));
+                         cutlist.add(((lastword+i)/2)+fontchecksize+2*cutlist.size());
                         
                      }
                     lastword=i;
-                     
                  }
             }
-            if(lastword+3*fontchecksize<ph)
+            if(lastword+3*fontchecksize+2*cutlist.size()<ph)
             {
-                cutlist.add(lastword+3*fontchecksize);
+                cutlist.add(lastword+3*fontchecksize+2*cutlist.size());
             }
             else cutlist.add(ph-1);
           //  System.out.println("The arraylist contains the following elements: "+ cutlist);
@@ -112,13 +111,12 @@ public class JavaApplication1 {
              
              //img1 = ImageIO.read(new File("prefix-1.png"));
               f=img.getHeight()/ph;
-              //System.out.println(f);
+           
               int s;
-            //  ImageIO.write(img.getSubimage(0,(int)(f*(84)),(int)(f*pw),(int)(f*(156-84))), "png", new File("7.png"));
              for(s=0;s<(cutlist.size()-1);s++)
              {
                 // System.out.println(cutlist.get(s));
-             ImageIO.write(img.getSubimage(0,(int)(f*(cutlist.get(s))),(int)(f*pw),(int)(f*(cutlist.get(s+1)-cutlist.get(s)))), "png", new File(txt+s+".png"));
+             ImageIO.write(img.getSubimage(0,(int)(f*(cutlist.get(s))+fontchecksize),(int)(f*pw),(int)(f*(cutlist.get(s+1)-cutlist.get(s)+fontchecksize/2))), "png", new File(txt+"-"+s+".png"));
              }
              
             
@@ -142,7 +140,7 @@ public class JavaApplication1 {
      */
     public static void main(String[] args) throws IOException, DocumentException 
 {
-    new JavaApplication1().parsePdf("2","prefix-1" );
+    //new JavaApplication1().parsePdf("2","prefix-2" );
   //  new JavaApplication1().parsePdf(args[0], args[1]);
 }
     
