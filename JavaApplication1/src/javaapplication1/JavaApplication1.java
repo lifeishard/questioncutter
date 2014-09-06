@@ -31,9 +31,9 @@ import javax.imageio.ImageIO;
 public class JavaApplication1 {
 
     /** The original PDF that will be parsed. */
-    public static final String PREFACE = "2.pdf";
+  //  public static final String PREFACE = "2.pdf";
     /** The resulting text file. */
-    public static final String RESULT = "preface_clipped.txt";
+    //public static final String RESULT = "preface_clipped.txt";
     public static final int fontchecksize=6;
     /**
      * Parses a specific area of a PDF to a plain text file.
@@ -49,7 +49,7 @@ public class JavaApplication1 {
            return  (PdfTextExtractor.getTextFromPage(reader, page, strategy));
     }      
     public void parsePdf(String pdf, String txt ) throws IOException {
-        PdfReader reader = new PdfReader(pdf);
+        PdfReader reader = new PdfReader(pdf+".pdf");
       //  PrintWriter out = new PrintWriter(new FileOutputStream(txt));
        // Rectangle rect = new Rectangle(0,0, 300,800);
       //  RenderFilter filter = new RegionTextRenderFilter(rect);
@@ -67,7 +67,8 @@ public class JavaApplication1 {
         ArrayList<Integer> cutlist; 
         int lastblank;
         int lastword;
-        int p=reader.getNumberOfPages();
+        //int p=reader.getNumberOfPages();
+        int p=1;
         double f;
         BufferedImage img;
         BufferedImage img1;
@@ -85,7 +86,7 @@ public class JavaApplication1 {
                  if(g.isEmpty())lastblank=i;
                   else
                  {
-                     //System.out.println(g);
+                   //  System.out.println(g);
                       if(lastword==0)
                       {
                           if(i>2*fontchecksize)cutlist.add(i-2*fontchecksize);
@@ -107,17 +108,21 @@ public class JavaApplication1 {
             }
             else cutlist.add(ph-1);
           //  System.out.println("The arraylist contains the following elements: "+ cutlist);
-             img = ImageIO.read(new File(txt));
+             img = ImageIO.read(new File(txt+".png"));
              
              //img1 = ImageIO.read(new File("prefix-1.png"));
               f=img.getHeight()/ph;
-             for(int s=0;s<cutlist.size()-1;s++)
+              //System.out.println(f);
+              int s;
+            //  ImageIO.write(img.getSubimage(0,(int)(f*(84)),(int)(f*pw),(int)(f*(156-84))), "png", new File("7.png"));
+             for(s=0;s<(cutlist.size()-1);s++)
              {
-             ImageIO.write(img.getSubimage(0,(int)(f*(cutlist.get(s))),(int)(f*pw),(int)(f*(cutlist.get(s+1)-cutlist.get(s)))), "png", new File(s+".png"));
+                // System.out.println(cutlist.get(s));
+             ImageIO.write(img.getSubimage(0,(int)(f*(cutlist.get(s))),(int)(f*pw),(int)(f*(cutlist.get(s+1)-cutlist.get(s)))), "png", new File(txt+s+".png"));
              }
              
             
-         /*    ImageIO.write(img.getSubimage(0,(int)(f*(84)),(int)(f*pw),(int)(f*(156-84))), "png", new File("7.png"));
+         /*  ImageIO.write(img.getSubimage(0,(int)(f*(84)),(int)(f*pw),(int)(f*(156-84))), "png", new File("7.png"));
              ImageIO.write(img.getSubimage(0,(int)(f*(156)),(int)(f*pw),(int)(f*(222-156))), "png", new File("8.png"));
              ImageIO.write(img1.getSubimage(0,(int)(f*(186)),(int)(f*pw),(int)(f*(225-186))), "png", new File("1.png"));
              ImageIO.write(img1.getSubimage(0,(int)(f*(225)),(int)(f*pw),(int)(f*(297-225))), "png", new File("2.png"));
@@ -137,7 +142,8 @@ public class JavaApplication1 {
      */
     public static void main(String[] args) throws IOException, DocumentException 
 {
-    new JavaApplication1().parsePdf(args[0], args[1]);
+    new JavaApplication1().parsePdf("2","prefix-1" );
+  //  new JavaApplication1().parsePdf(args[0], args[1]);
 }
     
 }
