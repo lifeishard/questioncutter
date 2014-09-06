@@ -4,9 +4,6 @@
  * and open the template in the editor.
  */
 package javaapplication1;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.*;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Rectangle;
@@ -25,7 +22,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
 import javax.imageio.ImageIO;
 
 public class JavaApplication1 {
@@ -58,68 +54,56 @@ public class JavaApplication1 {
             strategy = new FilteredTextRenderListener(new LocationTextExtractionStrategy(), filter);
             out.println(PdfTextExtractor.getTextFromPage(reader, i, strategy));
         }*/
-        
         int pw,ph;
         Rectangle mrect;
- 
-        //reader = new PdfReader(pdf);
         String g = new String();
         ArrayList<Integer> cutlist; 
-        int lastblank;
         int lastword;
         //int p=reader.getNumberOfPages();
         int p=1;
         double f;
         BufferedImage img;
-        BufferedImage img1;
         for(int k=1;k<=p;k++)
         {
             cutlist = new ArrayList<Integer>();
             lastword=0;
-            lastblank=-1;
             mrect= reader.getPageSize(k);
             ph=(int)mrect.getHeight();
             pw=(int)mrect.getWidth();
             for(int i= 0;i<=(ph-fontchecksize);i+=fontchecksize)
             {
                  g=mycheckline(reader,ph,pw,i,k);
-                 if(g.isEmpty())lastblank=i;
-                  else
+                 if(!g.isEmpty())
                  {
                    //  System.out.println(g);
-                      if(lastword==0)
+                      if(g.matches("\\d+\\..*"))
+                     {
+                         if(lastword==0)
                       {
-                          if(i>fontchecksize)cutlist.add(i-2*fontchecksize);
+                          if(i>fontchecksize)cutlist.add(i-fontchecksize);
                           else cutlist.add(0);
                           lastword=i;
                       }
-                      else if(g.matches("\\d+\\..*"))
-                     {
-                         cutlist.add(((lastword+i)/2)+fontchecksize+2*cutlist.size());
-                        
+                         else 
+                             cutlist.add(((lastword+i)/2));
                      }
-                    lastword=i;
+                      else if(lastword!=0)lastword=i;
                  }
             }
-            if(lastword+3*fontchecksize+2*cutlist.size()<ph)
+            if(lastword+3*fontchecksize<ph)
             {
-                cutlist.add(lastword+3*fontchecksize+2*cutlist.size());
+                cutlist.add(lastword+3*fontchecksize);
             }
             else cutlist.add(ph-1);
           //  System.out.println("The arraylist contains the following elements: "+ cutlist);
              img = ImageIO.read(new File(txt+".png"));
-             
-             //img1 = ImageIO.read(new File("prefix-1.png"));
               f=img.getHeight()/ph;
-           
-              int s;
-             for(s=0;s<(cutlist.size()-1);s++)
+             for(int s=0;s<(cutlist.size()-1);s++)
              {
                 // System.out.println(cutlist.get(s));
-             ImageIO.write(img.getSubimage(0,(int)(f*(cutlist.get(s))+fontchecksize),(int)(f*pw),(int)(f*(cutlist.get(s+1)-cutlist.get(s)+fontchecksize/2))), "png", new File(txt+"-"+s+".png"));
+             ImageIO.write(img.getSubimage(0,(int)(f*(cutlist.get(s)+4*s)),(int)(f*pw),(int)(f*(cutlist.get(s+1)-cutlist.get(s)+fontchecksize))), "png", new File(txt+"-"+s+".png"));
              }
-             
-            
+
          /*  ImageIO.write(img.getSubimage(0,(int)(f*(84)),(int)(f*pw),(int)(f*(156-84))), "png", new File("7.png"));
              ImageIO.write(img.getSubimage(0,(int)(f*(156)),(int)(f*pw),(int)(f*(222-156))), "png", new File("8.png"));
              ImageIO.write(img1.getSubimage(0,(int)(f*(186)),(int)(f*pw),(int)(f*(225-186))), "png", new File("1.png"));
@@ -130,8 +114,6 @@ public class JavaApplication1 {
              ImageIO.write(img1.getSubimage(0,(int)(f*(585)),(int)(f*pw),(int)(f*(630-585))), "png", new File("6.png"));*/
         }
     }
-
-
     /**
      * Main method.
      * @param    args    no arguments needed
@@ -140,10 +122,9 @@ public class JavaApplication1 {
      */
     public static void main(String[] args) throws IOException, DocumentException 
 {
-    //new JavaApplication1().parsePdf("2","prefix-2" );
-  //  new JavaApplication1().parsePdf(args[0], args[1]);
+   // new JavaApplication1().parsePdf("2","prefix-1" );
+   new JavaApplication1().parsePdf(args[0], args[1]);
 }
-    
 }
 
 
