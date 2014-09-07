@@ -44,7 +44,7 @@ public class JavaApplication1 {
           TextExtractionStrategy strategy = new FilteredTextRenderListener(new LocationTextExtractionStrategy(), filter);
            return  (PdfTextExtractor.getTextFromPage(reader, page, strategy));
     }      
-    public void parsePdf(String pdf, String txt ) throws IOException {
+    public void parsePdf(String pdf, String txt, String outfolder ) throws IOException {
         PdfReader reader = new PdfReader(pdf+".pdf");
       //  PrintWriter out = new PrintWriter(new FileOutputStream(txt));
        // Rectangle rect = new Rectangle(0,0, 300,800);
@@ -98,10 +98,11 @@ public class JavaApplication1 {
           //  System.out.println("The arraylist contains the following elements: "+ cutlist);
              img = ImageIO.read(new File(txt+".png"));
               f=img.getHeight()/ph;
+              System.out.print(cutlist.size()-1);
              for(int s=0;s<(cutlist.size()-1);s++)
              {
                 // System.out.println(cutlist.get(s));
-             ImageIO.write(img.getSubimage(0,(int)(f*(cutlist.get(s)+4*s)),(int)(f*pw),(int)(f*(cutlist.get(s+1)-cutlist.get(s)+fontchecksize))), "png", new File(txt+"-"+s+".png"));
+             ImageIO.write(img.getSubimage(0,(int)(f*(cutlist.get(s)+4*s)),(int)(f*pw),(int)(f*(cutlist.get(s+1)-cutlist.get(s)+fontchecksize))), "png", new File(outfolder+txt+"-"+s+".png"));
              }
 
          /*  ImageIO.write(img.getSubimage(0,(int)(f*(84)),(int)(f*pw),(int)(f*(156-84))), "png", new File("7.png"));
@@ -122,8 +123,9 @@ public class JavaApplication1 {
      */
     public static void main(String[] args) throws IOException, DocumentException 
 {
-   // new JavaApplication1().parsePdf("2","prefix-1" );
-   new JavaApplication1().parsePdf(args[0], args[1]);
+   //new JavaApplication1().parsePdf("2","prefix-1","../" );
+    //new JavaApplication1().parsePdf("../../temp/540bf6d636d7720f49caae70","../../temp/540bf6d636d7720f49caae70-1" );
+  new JavaApplication1().parsePdf(args[0], args[1], args[2]);
 }
 }
 
