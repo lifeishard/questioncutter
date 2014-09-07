@@ -124,8 +124,8 @@ public class JavaApplication1 {
     public static void main(String[] args) throws IOException, DocumentException 
 {
    //new JavaApplication1().parsePdf("2","prefix-1","../" );
-    //new JavaApplication1().parsePdf("../../temp/540bf6d636d7720f49caae70","../../temp/540bf6d636d7720f49caae70-1" );
-  new JavaApplication1().parsePdf(args[0], args[1], args[2]);
+    new JavaApplication1().parsePdf("../../temp/540bf6d636d7720f49caae70","../../temp/540bf6d636d7720f49caae70-1","../../temp/" );
+ // new JavaApplication1().parsePdf(args[0], args[1], args[2]);
 }
 }
 
